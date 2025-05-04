@@ -67,7 +67,7 @@ const SurahDetail: React.FC = () => {
     };
   });
 
-  console.log(combinatedData);
+  // console.log(combinatedData);
 
   return (
     <div className="container mx-auto p-4">

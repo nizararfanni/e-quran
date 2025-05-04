@@ -1,19 +1,32 @@
 import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 import { UseSearchKeyword } from "../services/UseGetEquran";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { auth} from "../services/firesore-config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isActive, setIsActive] = useState("");
   const { data, isLoading } = UseSearchKeyword(searchQuery);
+  const [getUserName, setGetUserName] = useState("");
 
   const handleOnchange = (e: any) => {
     setSearchQuery(e.target.value);
   };
   const handleSearchCLick = () => {
     setSearchQuery("");
-  }
+  };
+  useEffect(() => {
+    const username = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setGetUserName(user.displayName || user.email || "");
+      } else {
+        setGetUserName("");
+      }
+    });
+    return () => username();
+  }, []);
   if (isLoading) {
     <p>Loading</p>;
   }
@@ -78,6 +91,7 @@ const Navbar: React.FC = () => {
             >
               🔍
             </button>
+            <p>{getUserName}</p>
             {/* result search */}
             <div className="absolute top-12 left-0 right-0 p-2 text-center gap-3 flex flex-col h-[300px] ">
               {isLoading ? (

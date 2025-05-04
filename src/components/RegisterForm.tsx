@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { auth, db } from "../services/firesore-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -23,6 +23,10 @@ const RegisterForm = () => {
       const user = userCredential.user;
       console.log("Saving to Firestore: ", user.uid, name, email);
 
+      await updateProfile(user, {
+        displayName: name,
+      });
+
       // Simpan data ke Firestore
       await setDoc(doc(db, "users", user.uid), {
         username: name,
@@ -33,8 +37,6 @@ const RegisterForm = () => {
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-
-
     } catch (err: any) {
       setError(err.message);
       console.error("Error saat register:", err);
