@@ -19,7 +19,7 @@ const AllJuz: React.FC = () => {
       let numbers = [];
       for (let i = 1; i <= 30; i++) {
         const response = await axios.get(
-          `http://api.alquran.cloud/v1/juz/${i}/quran-uthmani`
+          `https://api.alquran.cloud/v1/juz/${i}/quran-uthmani`
         );
 
         if (response.data) {
